@@ -1,0 +1,32 @@
+mixin svg(width, height, viewBox)
+	svg(
+		version="1.1"
+		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		width=width
+		height=height
+		viewBox=viewBox
+	)
+		style(type="text/css")
+			each info, fontName in fonts
+				| @font-face {
+				|	 font-family: "#{fontName}";
+				|	 src: url("file://#{info.path}");
+				|	}
+		g(
+			font-family="body"
+		)
+			block
+
+- imageFillId = 0
+mixin imageFill(image, x, y, width, height)
+	defs
+		clipPath(id="imageFill-"+imageFillId)
+			rect(x=x, y=y, width=width, height=height)
+	- landscape = (width/height) > (image.dims.width/image.dims.height)
+	- imgWidth = landscape ? width : height*image.dims.width/image.dims.height
+	- imgHeight = landscape ? width*image.dims.height/image.dims.width : height
+	- imgX = landscape ? x : x - (imgWidth-width)/2
+	- imgY = landscape ? y - (imgHeight-height)/2 : y
+	image(x=imgX, y=imgY, width=imgWidth, height=imgHeight, clip-path="url(#imageFill-"+imageFillId+")", xlink:href="file://"+image.path)&attributes(attributes)
+	- imageFillId += 1

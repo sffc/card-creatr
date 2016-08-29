@@ -1,0 +1,13 @@
+{
+	fonts: {
+		title: {
+			path: "fonts/amaranth/Amaranth-Regular.otf"
+		}
+	},
+	template: {
+		path: "template.pug"
+	},
+	data: {
+		path: "cards.csv"
+	}
+}

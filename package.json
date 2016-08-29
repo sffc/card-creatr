@@ -1,0 +1,32 @@
+{
+  "name": "card-creatr",
+  "version": "1.0.0",
+  "description": "Tools for creating and rendering SVG files, with a focus on decks of cards for custom card games",
+  "main": "index.js",
+  "bin": {
+    "card-creatr": "bin/card-creatr.js"
+  },
+  "keywords": [
+    "render",
+    "card",
+    "deck",
+    "svg",
+    "custom",
+    "prototype",
+    "playtest",
+    "game"
+  ],
+  "author": "Shane Carr",
+  "license": "ISC",
+  "dependencies": {
+    "@vote539/excel-as-json": "^1.0.4",
+    "async": "^2.0.1",
+    "command-line-args": "^3.0.1",
+    "command-line-usage": "^3.0.3",
+    "fibers": "^1.0.13",
+    "hjson": "^2.0.5",
+    "image-size": "^0.5.0",
+    "pug": "^2.0.0-beta5",
+    "word-wrappr": "^1.0.0"
+  }
+}
