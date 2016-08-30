@@ -1,4 +1,4 @@
 "title","image.path","color","body[0].txt","body[1].txt"
-"Banker","images/bank.jpg","#84D9AE","Gain $2 from the bank.",""
-"Pickpocket","images/pickpocket.jpg","#DB959C","Steal $1 from any player.",""
-"Cash Out","images/cash.jpg","#A7C7EB","Gain VP equal to your money.","All players return their money to the bank."
+"Banker","images/bank.jpg","#09AD00","Gain $2 from the bank.",""
+"Pickpocket","images/pickpocket.jpg","#FF4D1C","Steal $1 from any player.",""
+"Cash Out","images/cash.jpg","#009DFF","Gain VP equal to your money.","All players return their money to the bank."

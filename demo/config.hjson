@@ -4,6 +4,13 @@
 			path: "fonts/amaranth/Amaranth-Regular.otf"
 		}
 	},
+	assets: {
+		paper_texture: {
+			image: {
+				path: "images/paper_texture.jpg"
+			}
+		}
+	},
 	template: {
 		path: "template.pug"
 	},
