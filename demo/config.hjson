@@ -1,9 +1,13 @@
 {
+	// Custom fonts to be used in your card.  Provide paths to ttf or otf files, as shown below.  Card Creatr provides two fonts by default, "title" and "body".  Specifying "title" or "body" here will override the default.
 	fonts: {
 		title: {
 			path: "fonts/amaranth/Amaranth-Regular.otf"
 		}
 	},
+
+	// Custom assets.
+	// TODO: Document this better.
 	assets: {
 		paper_texture: {
 			image: {
@@ -11,10 +15,44 @@
 			}
 		}
 	},
+
+	// Paths to the card template and data files relative to this config file.
 	template: {
 		path: "template.pug"
 	},
 	data: {
 		path: "cards.csv"
+	},
+
+	// Information for the internal coordinate systems within the card layout and page layout.  The "width" and "height" values will specify the width and height of the SVG view box.  For more information on the SVG view box, see https://www.google.com/search?q=svg+viewbox
+	viewports: {
+		card: {
+			width: 180,
+			height: 252
+		},
+		page: {
+			width: 612,
+			height: 792,
+			cardWidth: 180,
+			cardHeight: 252,
+
+			// Minimum print margin.  Defaults to zero.  Increase this to prevent cards from being placed too close to the edge of the page.
+			printMargin: 0
+		}
+	}
+
+	// Information to be used when exporting the cards.
+	// Note: 'pt' means 'points', a unit customary for print layout in the United States.  Supported units are: em, ex, px, pt, pc, cm, mm, and in.
+	dimensions: {
+		card: {
+			// 2.5 in by 3.5 in
+			width: "180pt",
+			height: "252pt"
+		},
+		page: {
+			// 8.5 in by 11 in
+			width: "612pt",
+			height: "792pt"
+		}
 	}
 }

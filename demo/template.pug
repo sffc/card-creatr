@@ -1,41 +1,36 @@
-doctype xml
+// Set up some initial definitions
+defs
+	filter(id="bwBlur")
+		feGaussianBlur(in="SourceGraphic", stdDeviation="0.5")
+		feColorMatrix(type="saturate", values="0")
 
-// Create an SVG, 180 pt by 252 pt (2.5 inches by 3.5 inches).  The second argument is the view box, which allows you to set custom scaling.  For more information, see https://www.google.com/search?q=svg+viewbox
-+svg("180pt","252pt","0 0 180 252")
+// Set the background color by drawing a rectangle to cover the entire canvas.  Note: after adding the inset, this will become more of a border.
+rect(x=0, y=0, width=180, height=252, fill=color)
 
-	// Set up some initial definitions
-	defs
-		filter(id="bwBlur")
-			feGaussianBlur(in="SourceGraphic", stdDeviation="0.5")
-			feColorMatrix(type="saturate", values="0")
+// Set inset background color to white.  Leave 9pt (1/8 in) border margin.
+// This uses imageFill, a convenience mixin to embed an image fit-to-fill the specified dimensions.  The arguments for the mixin are the image object, x, y, width, and height.  Additional attributes will be passed into the image object.
++imageFill(assets.paper_texture.image, 9, 9, 162, 234)
 
-	// Set the background color by drawing a rectangle to cover the entire canvas.  Note: after adding the inset, this will become more of a border.
-	rect(x=0, y=0, width=180, height=252, fill=color)
+// Create a simple text element for the title.  Position it near the top of the card, and center the text.
+text(x=90, y=28, font-size=17, text-anchor="middle", font-family="title") #{title}
 
-	// Set inset background color to white.  Leave 9pt (1/8 in) border margin.
-	// This uses imageFill, a convenience mixin to embed an image fit-to-fill the specified dimensions.  The arguments for the mixin are the image object, x, y, width, and height.  Additional attributes will be passed into the image object.
-	+imageFill(assets.paper_texture.image, 9, 9, 162, 234)
+// Another instance of the imageFill mixin.
++imageFill(image, 9, 35, 162, 110)(filter="url(#bwBlur)")
 
-	// Create a simple text element for the title.  Position it near the top of the card, and center the text.
-	text(x=90, y=28, font-size=17, text-anchor="middle", font-family="Title") #{title}
+// Lay a transparent rectangle over the image to give it a tint.
+rect(x=9, y=35, width=162, height=110, fill=color, fill-opacity="0.2")
 
-	// Another instance of the imageFill mixin.
-	+imageFill(image, 9, 35, 162, 110)(filter="url(#bwBlur)")
-
-	// Lay a transparent rectangle over the image to give it a tint.
-	rect(x=9, y=35, width=162, height=110, fill=color, fill-opacity="0.2")
-
-	// Use the following markup to create a text wrap block for an array of paragraphs.  It is necessary to create a 'text' element for each line.  The function 'wrappr.body.wrap' returns an array of lines wrapped to the specified font size and width.
-	- var y = 160
-	- var fontSize = 11
-	- var fontFamily = "body"
-	each text in body
-		each line,i in wrappr[fontFamily].wrap(text.txt, fontSize, 156)
-			text(
-				x=12,
-				y=y,
-				font-size=fontSize,
-				font-family=fontFamily
-			) #{line}
-			- y += 13 // spacing between lines
-		- y += 8 // spacing between paragraphs
+// Use the following markup to create a text wrap block for an array of paragraphs.  It is necessary to create a 'text' element for each line.  The function 'wrappr.body.wrap' returns an array of lines wrapped to the specified font size and width.
+- var y = 160
+- var fontSize = 11
+- var fontFamily = "body"
+each text in body
+	each line,i in wrappr[fontFamily].wrap(text.txt, fontSize, 156)
+		text(
+			x=12,
+			y=y,
+			font-size=fontSize,
+			font-family=fontFamily
+		) #{line}
+		- y += 13 // spacing between lines
+	- y += 8 // spacing between paragraphs

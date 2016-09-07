@@ -23,10 +23,13 @@
     "async": "^2.0.1",
     "command-line-args": "^3.0.1",
     "command-line-usage": "^3.0.3",
+    "doctypes": "^1.1.0",
     "fibers": "^1.0.13",
     "hjson": "^2.0.5",
     "image-size": "^0.5.0",
+    "phantomjs-prebuilt": "^2.1.12",
     "pug": "^2.0.0-beta5",
-    "word-wrappr": "^1.0.0"
+    "word-wrappr": "^1.0.0",
+    "xmlbuilder": "^8.2.2"
   }
 }

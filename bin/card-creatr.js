@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 "use strict";
 
+const async = require("async");
 const fs = require("fs");
 const path = require("path");
 const ReadAndRender = require("../lib/read-and-render");
+const PageRenderer = require("../lib/page");
+const SvgHolder = require("../lib/svg");
 
 const optionList = [
 	{
@@ -50,6 +53,12 @@ const optionList = [
 		defaultValue: null
 	},
 	{
+		name: "pages",
+		type: Boolean,
+		description: "Generate a page layout for printing instead of an individual card layout.",
+		defaultValue: false
+	},
+	{
 		name: "help",
 		alias: "h",
 		description: "Print this usage guide.",
@@ -74,6 +83,7 @@ if (options.help) {
 	process.exit(0);
 }
 
+// Create the ReadAndRender instance
 const inst = new ReadAndRender(options.config, {
 	template: {
 		path: options.template
@@ -88,23 +98,28 @@ const inst = new ReadAndRender(options.config, {
 	}
 });
 
-// var result;
-// try {
-// 	result = inst.runSync();
-// 	if (result.length === 0) {
-// 		throw new Error("No cards are available matching your query.");
-// 	}
-// } catch(e) {
-// 	console.error("Error:", e.message);
-// 	fs.writeFileSync("card-creatr.log", e.stack + "\n");
-// 	console.error("More information available in card-creatr.log");
-// 	process.exit(1);
-// }
-
-// process.stdout.write(result[0]);
-// process.stdout.write("\n");
-
-inst.run((err, result) => {
+// Perform the main computation
+async.auto({
+	"cards": (_next) => {
+		inst.run(_next);
+	},
+	"print": ["cards", (results, _next) => {
+		var svgHolder = new SvgHolder();
+		svgHolder.fonts = inst.options.fonts;
+		if (options.pages) {
+			let pageRenderer = new PageRenderer(inst.options.viewports.page);
+			svgHolder.width = inst.options.dimensions.page.width;
+			svgHolder.height = inst.options.dimensions.page.height;
+			svgHolder.content = pageRenderer.render(results.cards)[0];
+		} else {
+			svgHolder.width = inst.options.dimensions.card.width;
+			svgHolder.height = inst.options.dimensions.card.height;
+			svgHolder.content = results.cards[0];
+		}
+		svgHolder.finalize(process.stdout);
+		process.stdout.write("\n");
+	}]
+}, (err) => {
 	if (err) {
 		console.error("Error:", err.message);
 		fs.writeFileSync("card-creatr.log", err.stack + "\n");
@@ -112,7 +127,4 @@ inst.run((err, result) => {
 		process.exit(1);
 		return;  // not needed?
 	}
-
-	process.stdout.write(result[0]);
-	process.stdout.write("\n");
 });
