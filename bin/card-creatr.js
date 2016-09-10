@@ -32,13 +32,6 @@ const optionList = [
 		defaultValue: path.join(__dirname, "..", "demo", "config.hjson")
 	},
 	{
-		name: "row",
-		type: Number,
-		typeLabel: "[underline]{integer}",
-		description: "Index of the row in the data file you would like to render.  Defaults to 0 (the first row).  Ignored if 'id' or 'title' is present.",
-		defaultValue: 0
-	},
-	{
 		name: "id",
 		type: String,
 		typeLabel: "[underline]{string}",
@@ -53,10 +46,16 @@ const optionList = [
 		defaultValue: null
 	},
 	{
-		name: "pages",
-		type: Boolean,
+		name: "page",
+		type: Number,
 		description: "Generate a page layout for printing instead of an individual card layout.",
-		defaultValue: false
+		defaultValue: -1
+	},
+	{
+		name: "multiples",
+		type: Number,
+		description: "Number of times to print each card.",
+		defaultValue: 1
 	},
 	{
 		name: "help",
@@ -92,9 +91,9 @@ const inst = new ReadAndRender(options.config, {
 		path: options.data
 	},
 	query: {
-		row: options.row,
 		id: options.id,
-		title: options.title
+		title: options.title,
+		multiples: options.multiples
 	}
 });
 
@@ -106,11 +105,11 @@ async.auto({
 	"print": ["cards", (results, _next) => {
 		var svgHolder = new SvgHolder();
 		svgHolder.fonts = inst.options.fonts;
-		if (options.pages) {
+		if (options.page !== -1) {
 			let pageRenderer = new PageRenderer(inst.options.viewports.page);
 			svgHolder.width = inst.options.dimensions.page.width;
 			svgHolder.height = inst.options.dimensions.page.height;
-			svgHolder.content = pageRenderer.render(results.cards)[0];
+			svgHolder.content = pageRenderer.render(results.cards)[options.page-1];
 		} else {
 			svgHolder.width = inst.options.dimensions.card.width;
 			svgHolder.height = inst.options.dimensions.card.height;

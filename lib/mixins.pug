@@ -28,5 +28,17 @@ mixin imageFill(image, x, y, width, height)
 	- imgHeight = landscape ? width*image.dims.height/image.dims.width : height
 	- imgX = landscape ? x : x - (imgWidth-width)/2
 	- imgY = landscape ? y - (imgHeight-height)/2 : y
-	image(x=imgX, y=imgY, width=imgWidth, height=imgHeight, clip-path="url(#imageFill-"+imageFillId+")", xlink:href="file://"+image.path)&attributes(attributes)
+	image(x=imgX, y=imgY, width=imgWidth, height=imgHeight, clip-path="url(#imageFill-"+imageFillId+")", xlink:href=image.dataUri)&attributes(attributes)
 	- imageFillId += 1
+
+mixin textWrap(paragraphs, fontFamily, width, yStart, fontSize, lineHeight, paragraphSpacing)
+	- var y = yStart
+	each text in paragraphs
+		each line,i in wrappr[fontFamily].wrap(text, fontSize, width)
+			text(
+				y=y,
+				font-size=fontSize,
+				font-family=fontFamily
+			)&attributes(attributes) #{line}
+			- y += lineHeight
+		- y += paragraphSpacing

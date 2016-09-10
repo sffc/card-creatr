@@ -1,8 +1,9 @@
 {
-	// Custom fonts to be used in your card.  Provide paths to ttf or otf files, as shown below.  Card Creatr provides two fonts by default, "title" and "body".  Specifying "title" or "body" here will override the default.
+	// Custom fonts to be used in your card.  Provide paths to ttf or otf files, as shown below.  Also include the name of the font on your system, which will be used as a fallback if the font file is not available.  Card Creatr provides two fonts by default, "title" and "body".  Specifying "title" or "body" here will override the default.
 	fonts: {
 		title: {
-			path: "fonts/amaranth/Amaranth-Regular.otf"
+			path: "fonts/amaranth/Amaranth-Regular.otf",
+			localName: "Amaranth Regular"
 		}
 	},
 
