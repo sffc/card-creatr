@@ -6,30 +6,36 @@ const fs = require("fs");
 const path = require("path");
 const ReadAndRender = require("../lib/read-and-render");
 const PageRenderer = require("../lib/page");
+const rsvg = require("../lib/rsvg");
+const streams = require("memory-streams");
 const SvgHolder = require("../lib/svg");
 
 const optionList = [
-	{
-		name: "template",
-		type: String,
-		typeLabel: "[underline]{file}",
-		description: "Path to the *.pug file containing the SVG template.",
-		defaultValue: path.join(__dirname, "..", "demo", "template.pug")
-	},
-	{
-		name: "data",
-		type: String,
-		typeLabel: "[underline]{file}",
-		description: "Path to the spreadsheet containing the card data.",
-		defaultValue: path.join(__dirname, "..", "demo", "cards.csv")
-	},
 	{
 		name: "config",
 		alias: "c",
 		type: String,
 		typeLabel: "[underline]{file}",
 		description: "Path to the JSON or HJSON config file.",
-		defaultValue: path.join(__dirname, "..", "demo", "config.hjson")
+	},
+	{
+		name: "out",
+		alias: "o",
+		type: String,
+		typeLabel: "[underline]{file}",
+		description: "Path to the output file.  Supported file types are *.svg and *.png.  If omitted, an SVG will be printed to standard out.",
+	},
+	{
+		name: "template",
+		type: String,
+		typeLabel: "[underline]{file}",
+		description: "Path to the *.pug file containing the SVG template.",
+	},
+	{
+		name: "data",
+		type: String,
+		typeLabel: "[underline]{file}",
+		description: "Path to the spreadsheet containing the card data.",
 	},
 	{
 		name: "id",
@@ -54,7 +60,7 @@ const optionList = [
 	{
 		name: "multiples",
 		type: Number,
-		description: "Number of times to print each card.",
+		description: "Number of times to print each card.  Relevant only if 'page' is specified.",
 		defaultValue: 1
 	},
 	{
@@ -83,7 +89,7 @@ const usageList = [
 ];
 
 const options = require("command-line-args")(optionList);
-if (options.help) {
+if (options.help || !options.config) {
 	console.log(require("command-line-usage")(usageList));
 	process.exit(0);
 }
@@ -132,18 +138,40 @@ function afterRun(cards) {
 		process.exit(1);
 	}
 
+	var dimensions;
 	var svgHolder = new SvgHolder();
 	svgHolder.fonts = inst.options.get("/fonts");
 	if (options.page !== -1) {
 		let pageRenderer = new PageRenderer(inst.options.get("/viewports/page"));
-		svgHolder.width = inst.options.get("/dimensions/page/width");
-		svgHolder.height = inst.options.get("/dimensions/page/height")
+		dimensions = inst.options.get("/dimensions/page");
+		svgHolder.width = dimensions.width + dimensions.unit;
+		svgHolder.height = dimensions.height + dimensions.unit;
 		svgHolder.content = pageRenderer.render(cards)[options.page-1];
 	} else {
-		svgHolder.width = inst.options.get("/dimensions/card/width");
-		svgHolder.height = inst.options.get("/dimensions/card/height");
+		dimensions = inst.options.get("/dimensions/card");
+		svgHolder.width = dimensions.width + dimensions.unit;
+		svgHolder.height = dimensions.height + dimensions.unit;
 		svgHolder.content = cards[0];
 	}
-	svgHolder.finalize(process.stdout);
-	process.stdout.write("\n");
+
+	if (options.out) {
+		let extension = options.out.substring(options.out.length - 4);
+		let format = "svg";
+		if (extension === ".png") format = "png";
+		if (extension === ".pdf") format = "pdf";
+		if (format === "svg") {
+			let writeStream = fs.createWriteStream(options.out);
+			svgHolder.finalize(writeStream);
+			writeStream.end();
+		} else {
+			let writeStream = new streams.WritableStream();
+			svgHolder.finalize(writeStream);
+			let svgBuffer = writeStream.toBuffer();
+			let rasterBuffer = rsvg.render(svgBuffer, dimensions, format);
+			fs.writeFile(options.out, rasterBuffer);
+		}
+	} else {
+		svgHolder.finalize(process.stdout);
+		process.stdout.write("\n");
+	}
 }

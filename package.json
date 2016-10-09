@@ -27,6 +27,7 @@
     "hjson": "^2.0.5",
     "image-size": "^0.5.0",
     "librsvg": "^0.7.0",
+    "memory-streams": "^0.1.0",
     "opentype.js": "^0.6.5",
     "pug": "^2.0.0-beta5",
     "word-wrappr": "^1.0.0",
