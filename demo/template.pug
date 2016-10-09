@@ -11,8 +11,8 @@ rect(x=0, y=0, width=180, height=252, fill=color)
 // This uses imageFill, a convenience mixin to embed an image fit-to-fill the specified dimensions.  The arguments for the mixin are the image object, x, y, width, and height.  Additional attributes will be passed into the image object.
 +imageFill(assets.paper_texture.image, 9, 9, 162, 234)
 
-// Create a simple text element for the title.  Position it near the top of the card, and center the text.
-text(x=90, y=28, font-size=17, text-anchor="middle", font-family="title") #{title}
+// Create a simple text element for the title.  Position it near the top of the card, and center the text.  Note: For better portability, the text is rendered as paths.
++text(title)(align="center", font-family="title", font-size=17, x=90, y=28)
 
 // Another instance of the imageFill mixin.
 +imageFill(image, 9, 35, 162, 110)(filter="url(#bwBlur)")
@@ -20,17 +20,4 @@ text(x=90, y=28, font-size=17, text-anchor="middle", font-family="title") #{titl
 // Lay a transparent rectangle over the image to give it a tint.
 rect(x=9, y=35, width=162, height=110, fill=color, fill-opacity="0.2")
 
-// Use the following markup to create a text wrap block for an array of paragraphs.  It is necessary to create a 'text' element for each line.  The function 'wrappr.body.wrap' returns an array of lines wrapped to the specified font size and width.
-- var y = 160
-- var fontSize = 11
-- var fontFamily = "body"
-each text in body
-	each line,i in wrappr[fontFamily].wrap(text.txt, fontSize, 156)
-		text(
-			x=12,
-			y=y,
-			font-size=fontSize,
-			font-family=fontFamily
-		) #{line}
-		- y += 13 // spacing between lines
-	- y += 8 // spacing between paragraphs
++textWrap(body)(font-family="body", font-size=11, x=12, y=160, width=156)

@@ -1,7 +1,10 @@
 node_modules/
 node_modules_1/
 node_modules_2/
+_old/
+build/
 .vagrant
+Vagrantfile
 npm-debug.log
 card-creatr.log
 out.svg
