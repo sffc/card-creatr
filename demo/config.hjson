@@ -1,29 +1,18 @@
 {
 	// Custom fonts to be used in your card.  Provide paths to ttf or otf files, as shown below.  Also include the name of the font on your system, which will be used as a fallback if the font file is not available.  Card Creatr provides two fonts by default, "title" and "body".  Specifying "title" or "body" here will override the default.
 	fonts: {
-		title: {
-			path: "fonts/amaranth/Amaranth-Regular.otf",
-			localName: "Amaranth Regular"
-		}
+		"title (font)": "fonts/amaranth/Amaranth-Regular.otf"
 	},
 
 	// Custom assets.
 	// TODO: Document this better.
 	assets: {
-		paper_texture: {
-			image: {
-				path: "images/paper_texture.jpg"
-			}
-		}
+		"paper_texture (img,path)": "images/paper_texture.jpg"
 	},
 
 	// Paths to the card template and data files relative to this config file.
-	template: {
-		path: "template.pug"
-	},
-	data: {
-		path: "cards.csv"
-	},
+	"template (path)": "template.pug",
+	"data (path)": "cards.csv",
 
 	// Information for the internal coordinate systems within the card layout and page layout.  The "width" and "height" values will specify the width and height of the SVG view box.  For more information on the SVG view box, see https://www.google.com/search?q=svg+viewbox
 	viewports: {

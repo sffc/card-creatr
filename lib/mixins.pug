@@ -7,16 +7,7 @@ mixin svg(width, height, viewBox)
 		height=height
 		viewBox=viewBox
 	)
-		style(type="text/css")
-			each info, fontName in _fonts
-				| @font-face {
-				|	 font-family: "#{fontName}";
-				|	 src: url("file://#{info.path}");
-				|	}
-		g(
-			font-family="body"
-		)
-			block
+		block
 
 - _imageFillId = 0
 mixin imageFill(image, x, y, width, height)
@@ -40,7 +31,7 @@ mixin text(content)
 	-   content = pug_html;
 	-   pug_html = _pug_html;
 	- }
-	- var options = _applyTextDefaults(attributes)
+	- var options = _applyTextDefaults(attributes, _fonts)
 	- var d = _makeTextPath(content, options)
 	path(d=d)&attributes(attributes)
 
@@ -54,7 +45,7 @@ mixin textWrap(paragraphs)
 	-   pug_html = _pug_html;
 	- }
 	- if (typeof paragraphs === "string") paragraphs = [paragraphs];
-	- var options = _applyTextWrapDefaults(attributes)
+	- var options = _applyTextWrapDefaults(attributes, _fonts)
 	each text in paragraphs
 		- if (text.txt) text = text.txt
 		each line,i in options.wrappr.wrap(text, options.fontSize, options.width)

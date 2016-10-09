@@ -9,7 +9,7 @@ rect(x=0, y=0, width=180, height=252, fill=color)
 
 // Set inset background color to white.  Leave 9pt (1/8 in) border margin.
 // This uses imageFill, a convenience mixin to embed an image fit-to-fill the specified dimensions.  The arguments for the mixin are the image object, x, y, width, and height.  Additional attributes will be passed into the image object.
-+imageFill(assets.paper_texture.image, 9, 9, 162, 234)
++imageFill(assets.paper_texture, 9, 9, 162, 234)
 
 // Create a simple text element for the title.  Position it near the top of the card, and center the text.  Note: For better portability, the text is rendered as paths.
 +text(title)(align="center", font-family="title", font-size=17, x=90, y=28)

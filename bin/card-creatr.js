@@ -58,6 +58,12 @@ const optionList = [
 		defaultValue: 1
 	},
 	{
+		name: "sync",
+		type: Boolean,
+		description: "Whether to run Card Creatr using the slower synchronous API.  Most users can ignore this option.",
+		defaultValue: false
+	},
+	{
 		name: "help",
 		alias: "h",
 		description: "Print this usage guide.",
@@ -84,12 +90,8 @@ if (options.help) {
 
 // Create the ReadAndRender instance
 const inst = new ReadAndRender(options.config, {
-	template: {
-		path: options.template
-	},
-	data: {
-		path: options.data
-	},
+	"template (path)": options.template,
+	"data (path)": options.data,
 	query: {
 		id: options.id,
 		title: options.title,
@@ -98,32 +100,50 @@ const inst = new ReadAndRender(options.config, {
 });
 
 // Perform the main computation
-async.auto({
-	"cards": (_next) => {
-		inst.run(_next);
-	},
-	"print": ["cards", (results, _next) => {
-		var svgHolder = new SvgHolder();
-		svgHolder.fonts = inst.options.fonts;
-		if (options.page !== -1) {
-			let pageRenderer = new PageRenderer(inst.options.viewports.page);
-			svgHolder.width = inst.options.dimensions.page.width;
-			svgHolder.height = inst.options.dimensions.page.height;
-			svgHolder.content = pageRenderer.render(results.cards)[options.page-1];
-		} else {
-			svgHolder.width = inst.options.dimensions.card.width;
-			svgHolder.height = inst.options.dimensions.card.height;
-			svgHolder.content = results.cards[0];
+if (options.sync) {
+	try {
+		let cards = inst.runSync();
+		afterRun(cards);
+	} catch(err) {
+		afterError(err);
+	}
+} else {
+	inst.run((err, cards) => {
+		if (err) {
+			afterError(err);
+			return;
 		}
-		svgHolder.finalize(process.stdout);
-		process.stdout.write("\n");
-	}]
-}, (err) => {
+		afterRun(cards);
+	});
+}
+
+function afterError(err) {
 	if (err) {
 		console.error("Error:", err.message);
 		fs.writeFileSync("card-creatr.log", err.stack + "\n");
 		console.error("More information available in card-creatr.log");
 		process.exit(1);
-		return;  // not needed?
 	}
-});
+}
+
+function afterRun(cards) {
+	if (cards.length === 0) {
+		console.error("Error: No cards were found matching your query.");
+		process.exit(1);
+	}
+
+	var svgHolder = new SvgHolder();
+	svgHolder.fonts = inst.options.get("/fonts");
+	if (options.page !== -1) {
+		let pageRenderer = new PageRenderer(inst.options.get("/viewports/page"));
+		svgHolder.width = inst.options.get("/dimensions/page/width");
+		svgHolder.height = inst.options.get("/dimensions/page/height")
+		svgHolder.content = pageRenderer.render(cards)[options.page-1];
+	} else {
+		svgHolder.width = inst.options.get("/dimensions/card/width");
+		svgHolder.height = inst.options.get("/dimensions/card/height");
+		svgHolder.content = cards[0];
+	}
+	svgHolder.finalize(process.stdout);
+	process.stdout.write("\n");
+}
