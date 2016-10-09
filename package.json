@@ -21,44 +21,15 @@
   "dependencies": {
     "@vote539/excel-as-json": "^1.0.4",
     "async": "^2.0.1",
-    "canvas": "^1.4.0",
-    "canvg": "0.0.8",
     "command-line-args": "^3.0.1",
     "command-line-usage": "^3.0.3",
     "datauri": "^1.0.4",
     "hjson": "^2.0.5",
     "image-size": "^0.5.0",
-    "java": "^0.7.2",
     "librsvg": "^0.7.0",
-    "node-java-maven": "0.0.12",
     "opentype.js": "^0.6.5",
     "pug": "^2.0.0-beta5",
-    "ttf2svg": "0.0.7",
     "word-wrappr": "^1.0.0",
     "xmlbuilder": "^8.2.2"
-  },
-  "java": {
-    "dependencies": [
-      {
-        "groupId": "org.apache.xmlgraphics",
-        "artifactId": "batik-transcoder",
-        "version": "1.8"
-      },
-      {
-        "groupId": "org.apache.xmlgraphics",
-        "artifactId": "batik-codec",
-        "version": "1.8"
-      },
-      {
-        "groupId": "org.apache.xmlgraphics",
-        "artifactId": "xmlgraphics-commons",
-        "version": "1.5"
-      },
-      {
-        "groupId": "crimson",
-        "artifactId": "crimson",
-        "version": "1.1.3"
-      }
-    ]
   }
 }
