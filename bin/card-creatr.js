@@ -3,6 +3,7 @@
 
 const async = require("async");
 const fs = require("fs");
+const log = require("../lib/logger")("card-creatr");
 const path = require("path");
 const ReadAndRender = require("../lib/read-and-render");
 const PageRenderer = require("../lib/page");
@@ -23,7 +24,7 @@ const optionList = [
 		alias: "o",
 		type: String,
 		typeLabel: "[underline]{file}",
-		description: "Path to the output file.  Supported file types are *.svg and *.png.  If omitted, an SVG will be printed to standard out.",
+		description: "Path to the output file.  Supported file types are *.svg, *.png, and *.pdf.  If omitted, an SVG will be printed to standard out.",
 	},
 	{
 		name: "template",
@@ -54,7 +55,7 @@ const optionList = [
 	{
 		name: "page",
 		type: Number,
-		description: "Generate a page layout for printing instead of an individual card layout.",
+		description: "Generate a page layout for printing instead of an individual card layout.  For example, '--page 2' will generate the second page of cards.",
 		defaultValue: -1
 	},
 	{
@@ -88,6 +89,7 @@ const usageList = [
 	}
 ];
 
+log.trace("options");
 const options = require("command-line-args")(optionList);
 if (options.help || !options.config) {
 	console.log(require("command-line-usage")(usageList));
@@ -95,6 +97,7 @@ if (options.help || !options.config) {
 }
 
 // Create the ReadAndRender instance
+log.trace("inst");
 const inst = new ReadAndRender(options.config, {
 	"template (path)": options.template,
 	"data (path)": options.data,
@@ -106,6 +109,7 @@ const inst = new ReadAndRender(options.config, {
 });
 
 // Perform the main computation
+log.trace("run");
 if (options.sync) {
 	try {
 		let cards = inst.runSync();
@@ -124,6 +128,7 @@ if (options.sync) {
 }
 
 function afterError(err) {
+	log.trace("afterError");
 	if (err) {
 		console.error("Error:", err.message);
 		fs.writeFileSync("card-creatr.log", err.stack + "\n");
@@ -133,6 +138,7 @@ function afterError(err) {
 }
 
 function afterRun(cards) {
+	log.trace("afterRun");
 	if (cards.length === 0) {
 		console.error("Error: No cards were found matching your query.");
 		process.exit(1);
@@ -154,16 +160,19 @@ function afterRun(cards) {
 		svgHolder.content = cards[0];
 	}
 
+	log.trace("output");
 	if (options.out) {
 		let extension = options.out.substring(options.out.length - 4);
 		let format = "svg";
 		if (extension === ".png") format = "png";
 		if (extension === ".pdf") format = "pdf";
 		if (format === "svg") {
+			log.trace("svg");
 			let writeStream = fs.createWriteStream(options.out);
 			svgHolder.finalize(writeStream);
 			writeStream.end();
 		} else {
+			log.trace("rsvg");
 			let writeStream = new streams.WritableStream();
 			svgHolder.finalize(writeStream);
 			let svgBuffer = writeStream.toBuffer();
@@ -171,7 +180,9 @@ function afterRun(cards) {
 			fs.writeFile(options.out, rasterBuffer);
 		}
 	} else {
+		log.trace("stdout");
 		svgHolder.finalize(process.stdout);
 		process.stdout.write("\n");
 	}
+	log.trace("done");
 }
