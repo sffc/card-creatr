@@ -112,17 +112,19 @@ const inst = new ReadAndRender(options.config, {
 log.trace("run");
 if (options.sync) {
 	try {
-		let cards = inst.runSync();
+		inst.loadSync();
+		let cards = inst.run();
 		afterRun(cards);
 	} catch(err) {
 		afterError(err);
 	}
 } else {
-	inst.run((err, cards) => {
+	inst.load((err) => {
 		if (err) {
 			afterError(err);
 			return;
 		}
+		let cards = inst.run();
 		afterRun(cards);
 	});
 }
