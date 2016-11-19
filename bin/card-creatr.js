@@ -13,14 +13,14 @@ const SvgHolder = require("../lib/svg");
 
 const optionList = [
 	{
-		name: "config",
-		alias: "c",
+		name: "input",
+		alias: "i",
 		type: String,
 		typeLabel: "[underline]{file}",
-		description: "Path to the JSON or HJSON config file.",
+		description: "Path to either a *.ccsb bundle file or a JSON/HJSON config file.",
 	},
 	{
-		name: "out",
+		name: "output",
 		alias: "o",
 		type: String,
 		typeLabel: "[underline]{file}",
@@ -91,14 +91,14 @@ const usageList = [
 
 log.trace("options");
 const options = require("command-line-args")(optionList);
-if (options.help || !options.config) {
+if (options.help || !options.input) {
 	console.log(require("command-line-usage")(usageList));
 	process.exit(0);
 }
 
 // Create the ReadAndRender instance
 log.trace("inst");
-const inst = new ReadAndRender(options.config, {
+const inst = new ReadAndRender(options.input, {
 	"template (path)": options.template,
 	"data (path)": options.data,
 	query: {
@@ -163,14 +163,14 @@ function afterRun(cards) {
 	}
 
 	log.trace("output");
-	if (options.out) {
-		let extension = options.out.substring(options.out.length - 4);
+	if (options.output) {
+		let extension = options.output.substring(options.output.length - 4);
 		let format = "svg";
 		if (extension === ".png") format = "png";
 		if (extension === ".pdf") format = "pdf";
 		if (format === "svg") {
 			log.trace("svg");
-			let writeStream = fs.createWriteStream(options.out);
+			let writeStream = fs.createWriteStream(options.output);
 			svgHolder.finalize(writeStream);
 			writeStream.end();
 		} else {
@@ -179,7 +179,7 @@ function afterRun(cards) {
 			svgHolder.finalize(writeStream);
 			let svgBuffer = writeStream.toBuffer();
 			let rasterBuffer = rsvg.render(svgBuffer, dimensions, format);
-			fs.writeFile(options.out, rasterBuffer);
+			fs.writeFile(options.output, rasterBuffer);
 		}
 	} else {
 		log.trace("stdout");
