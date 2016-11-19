@@ -1,15 +1,10 @@
 #!/usr/bin/env node
 "use strict";
 
-const async = require("async");
 const fs = require("fs");
 const log = require("../lib/logger")("card-creatr");
-const path = require("path");
+const mime = require("mime");
 const ReadAndRender = require("../lib/read-and-render");
-const PageRenderer = require("../lib/page");
-const rsvg = require("../lib/rsvg");
-const streams = require("memory-streams");
-const SvgHolder = require("../lib/svg");
 
 const optionList = [
 	{
@@ -103,18 +98,25 @@ const inst = new ReadAndRender(options.input, {
 	"data (path)": options.data,
 	query: {
 		id: options.id,
-		title: options.title,
-		multiples: options.multiples
+		title: options.title
 	}
 });
+
+// Compute output format
+var format = "svg";
+if (options.output) {
+	let type = mime.lookup(options.output);
+	if (type === "image/png") format = "png";
+	if (type === "application/pdf") format = "pdf";
+}
 
 // Perform the main computation
 log.trace("run");
 if (options.sync) {
 	try {
 		inst.loadSync();
-		let cards = inst.run();
-		afterRun(cards);
+		let outputBuffer = inst.run(options.page, options.multiples, format);
+		afterRun(outputBuffer);
 	} catch(err) {
 		afterError(err);
 	}
@@ -124,8 +126,12 @@ if (options.sync) {
 			afterError(err);
 			return;
 		}
-		let cards = inst.run();
-		afterRun(cards);
+		try {
+			let outputBuffer = inst.run(options.page, options.multiples, format);
+			afterRun(outputBuffer);
+		} catch(err) {
+			afterError(err);
+		}
 	});
 }
 
@@ -139,52 +145,14 @@ function afterError(err) {
 	}
 }
 
-function afterRun(cards) {
+function afterRun(outputBuffer) {
 	log.trace("afterRun");
-	if (cards.length === 0) {
-		console.error("Error: No cards were found matching your query.");
-		process.exit(1);
-	}
-
-	var dimensions;
-	var svgHolder = new SvgHolder();
-	svgHolder.fonts = inst.options.get("/fonts");
-	if (options.page !== -1) {
-		let pageRenderer = new PageRenderer(inst.options.get("/viewports/page"));
-		dimensions = inst.options.get("/dimensions/page");
-		svgHolder.width = dimensions.width + dimensions.unit;
-		svgHolder.height = dimensions.height + dimensions.unit;
-		svgHolder.content = pageRenderer.render(cards)[options.page-1];
-	} else {
-		dimensions = inst.options.get("/dimensions/card");
-		svgHolder.width = dimensions.width + dimensions.unit;
-		svgHolder.height = dimensions.height + dimensions.unit;
-		svgHolder.content = cards[0];
-	}
-
-	log.trace("output");
 	if (options.output) {
-		let extension = options.output.substring(options.output.length - 4);
-		let format = "svg";
-		if (extension === ".png") format = "png";
-		if (extension === ".pdf") format = "pdf";
-		if (format === "svg") {
-			log.trace("svg");
-			let writeStream = fs.createWriteStream(options.output);
-			svgHolder.finalize(writeStream);
-			writeStream.end();
-		} else {
-			log.trace("rsvg");
-			let writeStream = new streams.WritableStream();
-			svgHolder.finalize(writeStream);
-			let svgBuffer = writeStream.toBuffer();
-			let rasterBuffer = rsvg.render(svgBuffer, dimensions, format);
-			fs.writeFile(options.output, rasterBuffer);
-		}
+		fs.writeFile(options.output, outputBuffer);
 	} else {
-		log.trace("stdout");
-		svgHolder.finalize(process.stdout);
-		process.stdout.write("\n");
+		process.stdout.write(outputBuffer);
 	}
 	log.trace("done");
 }
+
+
