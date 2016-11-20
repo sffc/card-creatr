@@ -1,0 +1,26 @@
+{
+	"fields": [
+		{
+			"name": "title",
+			"display": "string",
+			"width": 150
+		},
+		{
+			"name": "image",
+			"properties": ["img", "path"],
+			"display": "image",
+			"width": 150
+		},
+		{
+			"name": "color",
+			"display": "string",
+			"width": 75
+		},
+		{
+			"name": "body",
+			"display": "string",
+			"width": 300,
+			"array": true
+		}
+	]
+}
