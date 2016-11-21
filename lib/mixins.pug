@@ -25,11 +25,15 @@ mixin imageFill(image, x, y, width, height)
 mixin text(content)
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
 	- if (!content) {
-	-   var _pug_html = pug_html;
-	-   pug_html = "";
-	-   block();
-	-   content = pug_html;
-	-   pug_html = _pug_html;
+	-   if (block) {
+	-     var _pug_html = pug_html;
+	-     pug_html = "";
+	-     block();
+	-     content = pug_html;
+	-     pug_html = _pug_html;
+	-   } else {
+	-     content = "";
+	-   }
 	- }
 	- var options = _applyTextDefaults(attributes, _fonts)
 	- var d = _makeTextPath(content, options)
@@ -38,16 +42,21 @@ mixin text(content)
 mixin textWrap(paragraphs)
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
 	- if (!paragraphs) {
-	-   var _pug_html = pug_html;
-	-   pug_html = "";
-	-   block();
-	-   paragraphs = pug_html;
-	-   pug_html = _pug_html;
+	-   if (block) {
+	-     var _pug_html = pug_html;
+	-     pug_html = "";
+	-     block();
+	-     paragraphs = pug_html;
+	-     pug_html = _pug_html;
+	-   } else {
+	-     paragraphs = "";
+	-   }
 	- }
 	- if (typeof paragraphs === "string") paragraphs = [paragraphs];
 	- var options = _applyTextWrapDefaults(attributes, _fonts)
 	each text in paragraphs
 		- if (text.txt) text = text.txt
+		- if (!text) text = ""
 		each line,i in options.wrappr.wrap(text, options.fontSize, options.width)
 			- var d = _makeTextPath(line, options)
 			path(d=d)&attributes(attributes)
