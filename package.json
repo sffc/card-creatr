@@ -26,6 +26,7 @@
     "command-line-args": "^3.0.1",
     "command-line-usage": "^3.0.3",
     "csv-parse": "^1.1.7",
+    "csv-stringify": "^1.0.4",
     "datauri": "^1.0.4",
     "debug-logger": "^0.4.1",
     "hjson": "^2.0.5",
