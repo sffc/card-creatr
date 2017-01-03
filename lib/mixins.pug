@@ -36,8 +36,13 @@ mixin text(content)
 	-   }
 	- }
 	- var options = _applyTextDefaults(attributes, _fonts)
-	- var d = _makeTextPath(content, options)
-	path(d=d)&attributes(attributes)
+	- if (_fontRenderMode === "paths") {
+	-   var d = _makeTextPath(content, options)
+			path(d=d)&attributes(attributes)
+	- } else {
+	-   var attrs = _makeTextAttributes(content, options)
+			text&attributes(attrs) #{content}
+	- }
 
 mixin textWrap(paragraphs)
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
@@ -58,7 +63,12 @@ mixin textWrap(paragraphs)
 		- if (text.txt) text = text.txt
 		- if (!text) text = ""
 		each line,i in options.wrappr.wrap(text, options.fontSize, options.width)
-			- var d = _makeTextPath(line, options)
-			path(d=d)&attributes(attributes)
+			- if (_fontRenderMode === "paths") {
+			-   var d = _makeTextPath(line, options)
+					path(d=d)&attributes(attributes)
+			- } else {
+			-   var attrs = _makeTextAttributes(line, options)
+					text&attributes(attrs) #{line}
+			- }
 			- options.y += options.lineHeight
 		- options.y += options.paragraphSpacing

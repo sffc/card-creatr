@@ -14,6 +14,10 @@
 	"template (path)": "template.pug",
 	"data (path)": "cards.csv",
 
+	// TODO: Document this
+	// Options: "paths", "auto"
+	fontRenderMode: "paths",
+
 	// Information for the internal coordinate systems within the card layout and page layout.  The "width" and "height" values will specify the width and height of the SVG view box.  For more information on the SVG view box, see https://www.google.com/search?q=svg+viewbox
 	viewports: {
 		card: {

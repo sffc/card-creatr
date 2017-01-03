@@ -66,6 +66,13 @@ const optionList = [
 		defaultValue: false
 	},
 	{
+		name: "options",
+		type: String,
+		typeLabel: "[underline]{json}",
+		description: "Additional options to override those in the config.hjson file.  Provide a JSON string: '{ \"key1\": \"value1\", ... }'",
+		defaultValue: null
+	},
+	{
 		name: "help",
 		alias: "h",
 		description: "Print this usage guide.",
@@ -93,14 +100,18 @@ if (options.help || !options.input) {
 
 // Create the ReadAndRender instance
 log.trace("inst");
-const inst = new ReadAndRender(options.input, {
-	"template (path)": options.template,
-	"data (path)": options.data,
-	query: {
-		id: options.id,
-		title: options.title
+const inst = new ReadAndRender(
+	options.input,
+	options.options ? JSON.parse(options.options) : {},
+	{
+		"template (path)": options.template,
+		"data (path)": options.data,
+		query: {
+			id: options.id,
+			title: options.title
+		}
 	}
-});
+);
 
 // Compute output format
 var format = "svg";
