@@ -5,6 +5,8 @@ var defaults = require("./lib/defaults");
 var OptionsParser = require("./lib/options");
 var PageRenderer = require("./lib/page");
 var ReadAndRender = require("./lib/read-and-render");
+var SvgHolder = require("./lib/svg");
+var utils = require("./lib/utils");
 
 module.exports = {
 	CardRenderer,
@@ -13,5 +15,7 @@ module.exports = {
 	defaults,
 	OptionsParser,
 	PageRenderer,
-	ReadAndRender
+	ReadAndRender,
+	SvgHolder,
+	utils
 };

@@ -24,7 +24,7 @@ mixin imageFill(image, x, y, width, height)
 
 mixin text(content)
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
-	- if (!content) {
+	- if (typeof content === "undefined") {
 	-   if (block) {
 	-     var _pug_html = pug_html;
 	-     pug_html = "";
@@ -32,7 +32,7 @@ mixin text(content)
 	-     content = pug_html;
 	-     pug_html = _pug_html;
 	-   } else {
-	-     content = "";
+	-     throw new Error("Undefined field in +text(): make sure that all fields referenced in the template exist in the card data");
 	-   }
 	- }
 	- var options = _applyTextDefaults(attributes, _fonts)
@@ -46,7 +46,7 @@ mixin text(content)
 
 mixin textWrap(paragraphs)
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
-	- if (!paragraphs) {
+	- if (typeof paragraphs === "undefined") {
 	-   if (block) {
 	-     var _pug_html = pug_html;
 	-     pug_html = "";
@@ -54,10 +54,10 @@ mixin textWrap(paragraphs)
 	-     paragraphs = pug_html;
 	-     pug_html = _pug_html;
 	-   } else {
-	-     paragraphs = "";
+	-     throw new Error("Undefined field in +textWrap(): make sure that all fields referenced in the template exist in the card data");
 	-   }
 	- }
-	- if (typeof paragraphs === "string") paragraphs = [paragraphs];
+	- if (typeof paragraphs === "string") paragraphs = paragraphs.split("\n");
 	- var options = _applyTextWrapDefaults(attributes, _fonts)
 	each text in paragraphs
 		- if (text.txt) text = text.txt
