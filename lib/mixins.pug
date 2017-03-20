@@ -34,6 +34,8 @@ mixin text(content)
 	-   } else {
 	-     throw new Error("Undefined field in +text(): make sure that all fields referenced in the template exist in the card data");
 	-   }
+	- } else if (!content) {
+	-   content = "";
 	- }
 	- var options = _applyTextDefaults(attributes, _fonts)
 	- if (_fontRenderMode === "paths") {
@@ -56,8 +58,11 @@ mixin textWrap(paragraphs)
 	-   } else {
 	-     throw new Error("Undefined field in +textWrap(): make sure that all fields referenced in the template exist in the card data");
 	-   }
+	- } else if (typeof paragraphs === "string") {
+	-   paragraphs = paragraphs.split("\n");
+	- } else if (!paragraphs) {
+	-   paragraphs = [];
 	- }
-	- if (typeof paragraphs === "string") paragraphs = paragraphs.split("\n");
 	- var options = _applyTextWrapDefaults(attributes, _fonts)
 	each text in paragraphs
 		- if (text.txt) text = text.txt

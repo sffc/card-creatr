@@ -15,6 +15,8 @@ const EXPECTED_AUTO = fs.readFileSync(path.join(__dirname, "cases", "auto.svg"))
 const EXPECTED_PNG = fs.readFileSync(path.join(__dirname, "cases", "cash.png"));
 const EXPECTED_PDF = fs.readFileSync(path.join(__dirname, "cases", "cash.pdf"));
 const EXPECTED_PAGE = fs.readFileSync(path.join(__dirname, "cases", "page1.svg"));
+const EXPECTED_PAGE_CONCAT = fs.readFileSync(path.join(__dirname, "cases", "page_concat.svg"));
+const EXPECTED_MULTIPAGE_PDF = fs.readFileSync(path.join(__dirname, "cases", "multipage.pdf"));
 
 function expectBufferEquals(a, b) {
 	var result = a.equals(b);
@@ -99,6 +101,36 @@ describe("ReadAndRender", function() {
 					var buffer = inst.run(1, 2, "svg");
 					expectBufferEquals(buffer, EXPECTED_PAGE);
 					return done(null);
+				} catch(err) {
+					return done(err);
+				}
+			});
+		});
+		it("should produce the expected Concatenated Pages output for config.hjson", function(done) {
+			var inst = new ReadAndRender(CONFIG_PATH, {});
+			inst.load((err) => {
+				if (err) return done(err);
+				try {
+					var buffer = inst.run(-2, 5, "svg");
+					expectBufferEquals(buffer, EXPECTED_PAGE_CONCAT);
+					return done(null);
+				} catch(err) {
+					return done(err);
+				}
+			});
+		});
+		it("should produce the expected multipage PDF output using slimerjs for config.hjson", function(done) {
+			this.timeout(5000);
+			var inst = new ReadAndRender(CONFIG_PATH, {});
+			inst.load((err) => {
+				if (err) return done(err);
+				try {
+					inst.run(-2, 5, "pdf", (err, buffer) => {
+						if (err) return done(err);
+						// The PDF seems to contain numbers that sometimes differ.  Just check the length for equality.
+						expect(EXPECTED_MULTIPAGE_PDF.length === buffer.length);
+						return done(null);
+					});
 				} catch(err) {
 					return done(err);
 				}

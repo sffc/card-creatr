@@ -7,6 +7,7 @@ var PageRenderer = require("./lib/page");
 var ReadAndRender = require("./lib/read-and-render");
 var SvgHolder = require("./lib/svg");
 var utils = require("./lib/utils");
+var rasterize = require("./lib/rasterize");
 
 module.exports = {
 	CardRenderer,
@@ -17,5 +18,6 @@ module.exports = {
 	PageRenderer,
 	ReadAndRender,
 	SvgHolder,
-	utils
+	utils,
+	rasterize
 };
