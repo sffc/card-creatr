@@ -37,7 +37,7 @@
     "opentype.js": "^0.6.5",
     "pdfkit": "^0.8.0",
     "pug": "^2.0.0-beta5",
-    "slimerjs-capture": "^1.2.1",
+    "slimerjs-capture": "^1.2.3",
     "stream-buffers": "^3.0.1",
     "svgkit": "^0.1.1",
     "uuid": "^3.0.0",
