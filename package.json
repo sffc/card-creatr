@@ -23,6 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.0.1",
+    "blob-to-buffer": "^1.2.6",
     "canvg": "0.0.8",
     "command-line-args": "^3.0.1",
     "command-line-usage": "^3.0.3",
