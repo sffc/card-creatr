@@ -1,4 +1,4 @@
-"title","image (img,path)","color","body[]","body[]"
-"Banker","images/bank.jpg","#09AD00","Gain $2 from the bank.",""
-"Pickpocket","images/pickpocket.jpg","#FF4D1C","Steal $1 from any player.",""
-"Cash Out","images/cash.jpg","#009DFF","Gain VP equal to your money.","All players return their money to the bank."
+"title","image (img,path)","color","stringNumber","body[]","body[]"
+"Banker","images/bank.jpg","#09AD00","+2","Gain $2 from the bank.",""
+"Pickpocket","images/pickpocket.jpg","#FF4D1C","+1","Steal $1 from any player.",""
+"Cash Out","images/cash.jpg","#009DFF","0","Gain VP equal to your money.","All players return their money to the bank."

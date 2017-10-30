@@ -7,16 +7,40 @@ const fs = require("fs");
 const path = require("path");
 const ReadAndRender = require("..").ReadAndRender;
 
+// Change this to TRUE to generate new test data and overwrite the old test data. (Never commit with the value set to true!)
+const OVERWRITE_EXPECTATIONS = false;
+
 const CONFIG_PATH = path.join(__dirname, "..", "demo", "config.hjson");
 const CCSB_PATH = path.join(__dirname, "..", "demo.ccsb");
 
-const EXPECTED_SVG = fs.readFileSync(path.join(__dirname, "cases", "cash.svg"));
-const EXPECTED_AUTO = fs.readFileSync(path.join(__dirname, "cases", "auto.svg"));
-const EXPECTED_PNG = fs.readFileSync(path.join(__dirname, "cases", "cash.png"));
-const EXPECTED_PDF = fs.readFileSync(path.join(__dirname, "cases", "cash.pdf"));
-const EXPECTED_PAGE = fs.readFileSync(path.join(__dirname, "cases", "page1.svg"));
-const EXPECTED_PAGE_CONCAT = fs.readFileSync(path.join(__dirname, "cases", "page_concat.svg"));
-const EXPECTED_MULTIPAGE_PDF = fs.readFileSync(path.join(__dirname, "cases", "multipage.pdf"));
+const EXPECTED_SVG_PATH = path.join(__dirname, "cases", "cash.svg");
+const EXPECTED_SVG = fs.readFileSync(EXPECTED_SVG_PATH);
+
+const EXPECTED_AUTO_PATH = path.join(__dirname, "cases", "auto.svg");
+const EXPECTED_AUTO = fs.readFileSync(EXPECTED_AUTO_PATH);
+
+const EXPECTED_PNG_PATH = path.join(__dirname, "cases", "cash.png");
+const EXPECTED_PNG = fs.readFileSync(EXPECTED_PNG_PATH);
+
+const EXPECTED_PDF_PATH = path.join(__dirname, "cases", "cash.pdf");
+const EXPECTED_PDF = fs.readFileSync(EXPECTED_PDF_PATH);
+
+const EXPECTED_PAGE_PATH = path.join(__dirname, "cases", "page1.svg");
+const EXPECTED_PAGE = fs.readFileSync(EXPECTED_PAGE_PATH);
+
+const EXPECTED_PAGE_CONCAT_PATH = path.join(__dirname, "cases", "page_concat.svg");
+const EXPECTED_PAGE_CONCAT = fs.readFileSync(EXPECTED_PAGE_CONCAT_PATH);
+
+const EXPECTED_MULTIPAGE_PDF_PATH = path.join(__dirname, "cases", "multipage.pdf");
+const EXPECTED_MULTIPAGE_PDF = fs.readFileSync(EXPECTED_MULTIPAGE_PDF_PATH);
+
+
+function maybeOverwriteExpected(path, buffer) {
+	if (!OVERWRITE_EXPECTATIONS) return;
+	console.log("overwriting:", path);
+	fs.writeFileSync(path, buffer);
+}
+
 
 function expectBufferEquals(a, b) {
 	var result = a.equals(b);
@@ -47,6 +71,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(-1, 1, "svg");
+					maybeOverwriteExpected(EXPECTED_SVG_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_SVG);
 					return done(null);
 				} catch(err) {
@@ -60,6 +85,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(-1, 1, "svg");
+					maybeOverwriteExpected(EXPECTED_SVG_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_SVG);
 					return done(null);
 				} catch(err) {
@@ -73,6 +99,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(-1, 1, "png");
+					maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_PNG);
 					return done(null);
 				} catch(err) {
@@ -86,6 +113,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(-1, 1, "pdf");
+					maybeOverwriteExpected(EXPECTED_PDF_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_PDF);
 					return done(null);
 				} catch(err) {
@@ -99,6 +127,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(1, 2, "svg");
+					maybeOverwriteExpected(EXPECTED_PAGE_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_PAGE);
 					return done(null);
 				} catch(err) {
@@ -112,6 +141,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(-2, 5, "svg");
+					maybeOverwriteExpected(EXPECTED_PAGE_CONCAT_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_PAGE_CONCAT);
 					return done(null);
 				} catch(err) {
@@ -127,6 +157,7 @@ describe("ReadAndRender", function() {
 				try {
 					inst.run(-2, 5, "pdf", (err, buffer) => {
 						if (err) return done(err);
+						maybeOverwriteExpected(EXPECTED_MULTIPAGE_PDF_PATH, buffer);
 						// The PDF seems to contain numbers that sometimes differ.  Just check the length for equality.
 						expect(EXPECTED_MULTIPAGE_PDF.length === buffer.length);
 						return done(null);
@@ -142,6 +173,7 @@ describe("ReadAndRender", function() {
 				if (err) return done(err);
 				try {
 					var buffer = inst.run(-1, 1, "svg");
+					maybeOverwriteExpected(EXPECTED_AUTO_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_AUTO);
 					return done(null);
 				} catch(err) {
@@ -157,6 +189,7 @@ describe("ReadAndRender", function() {
 			var inst = new ReadAndRender(CONFIG_PATH, { query: { title: "Cash Out" } });
 			inst.loadSync();
 			var buffer = inst.run(-1, 1, "svg");
+			maybeOverwriteExpected(EXPECTED_SVG_PATH, buffer);
 			expectBufferEquals(buffer, EXPECTED_SVG);
 		});
 		it("should throw error for config.ccsb", function() {
