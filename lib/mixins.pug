@@ -9,18 +9,14 @@ mixin svg(width, height, viewBox)
 	)
 		block
 
-- _imageFillId = 0
+mixin imageStretch(image, x, y, width, height)
+	image(x=x, y=y, width=width, height=height, xlink:href=image.dataUri, preserveAspectRatio="none")&attributes(attributes)
+
+mixin imageFit(image, x, y, width, height)
+	image(x=x, y=y, width=width, height=height, xlink:href=image.dataUri, preserveAspectRatio="xMidYMid meet")&attributes(attributes)
+
 mixin imageFill(image, x, y, width, height)
-	defs
-		clipPath(id="imageFill-"+_imageFillId)
-			rect(x=x, y=y, width=width, height=height)
-	- landscape = (width/height) > (image.dims.width/image.dims.height)
-	- imgWidth = landscape ? width : height*image.dims.width/image.dims.height
-	- imgHeight = landscape ? width*image.dims.height/image.dims.width : height
-	- imgX = landscape ? x : x - (imgWidth-width)/2
-	- imgY = landscape ? y - (imgHeight-height)/2 : y
-	image(x=imgX, y=imgY, width=imgWidth, height=imgHeight, clip-path="url(#imageFill-"+_imageFillId+")", xlink:href=image.dataUri)&attributes(attributes)
-	- _imageFillId += 1
+	image(x=x, y=y, width=width, height=height, xlink:href=image.dataUri, preserveAspectRatio="xMidYMid slice")&attributes(attributes)
 
 mixin text(content)
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
