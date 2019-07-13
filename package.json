@@ -22,6 +22,7 @@
   ],
   "author": "Shane Carr",
   "license": "ISC",
+  "repository": "sffc/card-creatr",
   "dependencies": {
     "async": "^2.6.2",
     "blob-to-buffer": "^1.2.8",
