@@ -25,6 +25,7 @@ const expect = require("expect");
 const fs = require("fs");
 const path = require("path");
 const ReadAndRender = require("..").ReadAndRender;
+const JsDiff = require("diff");
 
 // Change this to TRUE to generate new test data and overwrite the old test data. (Never commit with the value set to true!)
 const OVERWRITE_EXPECTATIONS = false;
@@ -56,6 +57,7 @@ const EXPECTED_PAGE_CONCAT = fs.readFileSync(EXPECTED_PAGE_CONCAT_PATH);
 
 function maybeOverwriteExpected(path, buffer) {
 	if (!OVERWRITE_EXPECTATIONS) return;
+	// eslint-disable-next-line no-console
 	console.log("overwriting:", path);
 	fs.writeFileSync(path, buffer);
 }
@@ -76,6 +78,34 @@ function expectBufferEquals(a, b) {
 			}
 		}
 		throw new Error(`Buffers not same length: ${a.length} vs. ${b.length}`);
+	}
+}
+
+
+function bufferToArray(buffer) {
+	var arr = new Array(buffer.length);
+	for (let byte of buffer.values()) {
+		arr.push(byte);
+	}
+	return arr;
+}
+
+
+function expectBufferAlmostEquals(a, b, fraction) {
+	var arr1 = bufferToArray(a);
+	var arr2 = bufferToArray(b);
+	var diff = JsDiff.diffArrays(arr1, arr2);
+	var sameCount = 0;
+	var diffCount = 0;
+	for (let change of diff) {
+		if (change.added || change.removed) {
+			diffCount += change.value.length;
+		} else {
+			sameCount += change.value.length;
+		}
+	}
+	if ((sameCount / (diffCount + sameCount)) < fraction) {
+		throw new Error(`Buffers differ: ${diffCount} diff / ${sameCount} equal`);
 	}
 }
 
@@ -121,7 +151,7 @@ describe("ReadAndRender", function() {
 					inst.run(-1, 1, "png", (err, buffer) => {
 						if (err) return done(err);
 						maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
-						expectBufferEquals(buffer, EXPECTED_PNG);
+						expectBufferAlmostEquals(buffer, EXPECTED_PNG, 0.95);
 						return done(null);
 					});
 				} catch(err) {
@@ -137,7 +167,7 @@ describe("ReadAndRender", function() {
 					inst.run(-1, 1, "png", (err, buffer) => {
 						if (err) return done(err);
 						maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
-						expectBufferEquals(buffer, EXPECTED_PNG);
+						expectBufferAlmostEquals(buffer, EXPECTED_PNG, 0.95);
 						return done(null);
 					});
 				} catch(err) {

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
+    "start": "$npm_package_bin_card_creatr",
     "test": "mocha test/e2e.js"
   },
   "bin": {
@@ -21,7 +22,7 @@
     "game"
   ],
   "author": "Shane F. Carr",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "repository": "sffc/card-creatr",
   "dependencies": {
     "async": "^2.6.2",
@@ -45,7 +46,8 @@
     "xmlbuilder": "^8.2.2"
   },
   "devDependencies": {
-    "eslint": "^6.0.1",
+    "diff": "^4.0.1",
+    "eslint": "^5.16.0",
     "expect": "^1.20.2",
     "mocha": "^6.1.4"
   }

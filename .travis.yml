@@ -6,6 +6,9 @@ install:
 script:
   - npm test
   - npm run lint
+  # Also perform a sanity check on the CLI
+  - npm start -- -i demo.ccsb -o demo.svg --title "Cash Out"
+  - diff demo.svg test/cases/cash.svg
 deploy:
   provider: npm
   email: vote539@gmail.com

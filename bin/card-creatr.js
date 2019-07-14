@@ -18,6 +18,8 @@
 
 "use strict";
 
+/* eslint-disable no-console */
+
 const fs = require("fs");
 const log = require("../lib/logger")("card-creatr");
 const mime = require("mime");
@@ -86,7 +88,7 @@ const optionList = [
 		name: "options",
 		type: String,
 		typeLabel: "{underline json}",
-		description: "Additional options to override those in the config.hjson file.  Provide a JSON string: '\\\{ \"key1\": \"value1\", ... \\\}'",
+		description: "Additional options to override those in the config.hjson file.  Provide a JSON string: '\\{ \"key1\": \"value1\", ... \\}'",
 		defaultValue: null
 	},
 	{
