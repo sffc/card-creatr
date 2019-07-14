@@ -1,14 +1,7 @@
 node_modules/
-node_modules_1/
-node_modules_2/
-node_modules_3/
 _old/
-build/
-.vagrant
+out/
+.vagrant/
 Vagrantfile
 npm-debug.log
 card-creatr.log
-out.*
-page1.pdf
-page2.pdf
-state_fair/

@@ -1,2 +1,10 @@
 demo/
 test/
+
+node_modules/
+_old/
+out/
+.vagrant/
+Vagrantfile
+npm-debug.log
+card-creatr.log

@@ -20,8 +20,8 @@
     "playtest",
     "game"
   ],
-  "author": "Shane Carr",
-  "license": "ISC",
+  "author": "Shane F. Carr",
+  "license": "GPLv3",
   "repository": "sffc/card-creatr",
   "dependencies": {
     "async": "^2.6.2",
