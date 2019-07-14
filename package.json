@@ -46,7 +46,6 @@
     "xmlbuilder": "^8.2.2"
   },
   "devDependencies": {
-    "diff": "^4.0.1",
     "eslint": "^5.16.0",
     "expect": "^1.20.2",
     "mocha": "^6.1.4"
