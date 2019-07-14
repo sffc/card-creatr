@@ -9,11 +9,12 @@ script:
   # Also perform a sanity check on the CLI
   - npm start -- -i demo.ccsb -o demo.svg --title "Cash Out"
   - diff demo.svg test/cases/cash.svg
+  - rm demo.svg
 deploy:
   provider: npm
-  email: vote539@gmail.com
+  email: shane@sffc.xyz
   api_key:
-    secure: dD6uNFp6DhPECzt9EcjA9csnEN96qE8a2h2ozZfv/qODhcPFUxGUjzkcgt8p4kBXIjGJSeZcbPGdmTXkInX0XU+v57PvsZXTcuyc61Q8fR+KI6m8f4ywzvchriBxZppART4+QqqfeGSxThqKOM+HQCgl/dQJiXVHN3VeulW6Yy2YjtspbndVuBsJsr88hHH/RgyLMn4aN0gExYFwb9Tn05htEmfNpILAmX2HXwD0jlMkI+itgCuqd5pDi2xgUZHtGhPtes5q2ESBEW6L3m/9oGEWjAt/OsOtVcKRdpmtJP+q+A/kTcb/CUmDdTiF8xLr/4bDawpZcPkaeQAs8PxSveJUAL984ihT4y5jAiPB9hBXSybCA7y5ruBszbGh26ljdUtX/jaFZRskSMzdbGlX24npZnhJztiDv8p+18rALIOPydVBioUmrow541N17J4UYPpNbsnWOmHoZla2t7MzRog19U6KGdILA2fOIeBpgQxwRL9ukyh9CUheB+NxL+RQc2DmThY3W7ZfVsBE+nDtBTWiG0Fsq7afubAVzcSrBEuGEcJkrAqUSN1Qoleoc5bHivFduMDzgmzQE9fqC4I1/u3ES93kvvWnYXS54/N9J6PGF3voKO67ts9yjp8repX3B/M8izGZuVav7DhqbTCUYlUz9D0u+Q+xy4lp3BsQVA4=
+    secure: shHe6NvSI6YznJBjVLCbISbVR1fuzBgKnwpxdG3/vihvd1gNwEDgjsiX8kNGf3QwiQ6apUa8oZbx31XdEXX8puE9oeOkLhK+bT+woYljMVnpS+PGuZv2XGCcaH8FuERZorYwKOc92fHHLEj1iyRLzy0qp6GgYNKKDFwChSsXALxxMFg4SEE7Oqq1fm2J3NBt9Y+SGD4bUNS/xIioexKY5P4sGW0XLvajbjV/rOu5FYbtzR4VirUu79FnEwugh6plQR3TgmB+DFKfb4SVhwjgAIK6m0RDOUMzRgiUsgt2mu3MTCucFPRpkXLsbn2I7Jg5UFfSiwtgMQ1GN+q2u1vqrr8PcM6qICw5ZjW04IV5AyBJtwIl5HtzFy7fQuvYXGQ8gVo/lJHbyQSjPTL+XmVrNpxjx6dcuOqLLtZOK4EtEa72zD0fMJxSMK3Hmtwc4yEpW2jUu2/4yvzTYm7ZaPeYX6/HKHs89nx6TP9w2C078T7x4GwdGDwDlHB4d69RL7hrw6eCk2SF48uVgsHECqflod1qP97ZDnmLt+ONfQaLcUVueCPrPFjn/LeYwNLsrsNP1Fbq3nzml6wfNxUlGt3Vmnq/GDQWDiLj9KD8wExcD2c1oiTVh9vAZxXh6kkeGhmB00TUQS/tI9E7nB9RWmI/VuhIeMikNGPtusK99fIbtLU=
   on:
     tags: true
     repo: sffc/card-creatr
