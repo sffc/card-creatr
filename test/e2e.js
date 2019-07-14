@@ -25,6 +25,7 @@ const expect = require("expect");
 const fs = require("fs");
 const path = require("path");
 const ReadAndRender = require("..").ReadAndRender;
+const isCI = require("is-ci");
 
 // Change this to TRUE to generate new test data and overwrite the old test data. (Never commit with the value set to true!)
 const OVERWRITE_EXPECTATIONS = false;
@@ -115,7 +116,7 @@ describe("ReadAndRender", function() {
 			});
 		});
 		it("should produce the expected PNG output for config.hjson", function(done) {
-			if (process.env.NODE_ENV === "continuous-integration") {
+			if (isCI) {
 				// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
 				this.skip();
 			}
@@ -135,7 +136,7 @@ describe("ReadAndRender", function() {
 			});
 		});
 		it("should produce the expected PNG output for config.ccsb", function(done) {
-			if (process.env.NODE_ENV === "continuous-integration") {
+			if (isCI) {
 				// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
 				this.skip();
 			}
