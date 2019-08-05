@@ -1,6 +1,6 @@
 {
   "name": "card-creatr",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Tools for creating and rendering SVG files, with a focus on decks of cards for custom card games",
   "main": "index.js",
   "scripts": {
