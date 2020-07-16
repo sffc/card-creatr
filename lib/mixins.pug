@@ -54,7 +54,7 @@ mixin text(content)
 			path(d=d)&attributes(attributes)
 	- } else {
 	-   var attrs = _makeTextAttributes(content, options)
-			text&attributes(attrs) #{content}
+			text&attributes(attrs) !{content}
 	- }
 
 mixin textWrap(paragraphs)
@@ -78,13 +78,21 @@ mixin textWrap(paragraphs)
 	each text in paragraphs
 		- if (text.txt) text = text.txt
 		- if (!text) text = ""
-		each line,i in options.wrappr.wrap(text, options.fontSize, options.width)
+		each line,i in _wrapText(text, options)
 			- if (_fontRenderMode === "paths") {
 			-   var d = _makeTextPath(line, options)
 					path(d=d)&attributes(attributes)
 			- } else {
 			-   var attrs = _makeTextAttributes(line, options)
-					text&attributes(attrs) #{line}
+					text&attributes(attrs) !{line}
 			- }
 			- options.y += options.lineHeight
 		- options.y += options.paragraphSpacing
+
+mixin style(style, cssClass)
+	- if(cssClass)
+			style(type="text/css").
+				tspan.#{cssClass} #{style}
+	- else
+			style(type="text/css").
+				tspan #{style}
