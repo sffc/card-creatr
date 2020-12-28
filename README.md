@@ -3,7 +3,7 @@ card-creatr
 
 *card-creatr* is a command-line utility that renders \*.ccsb files to SVG or PNG output.  A graphical user interface for this tool is [Card Creatr Studio](https://cardcreatr.sffc.xyz).
 
-[![Build Status](https://travis-ci.com/sffc/card-creatr.svg?branch=master)](https://travis-ci.com/sffc/card-creatr)
+[![Node.js CI](https://github.com/sffc/card-creatr/workflows/Node.js%20CI/badge.svg)](https://github.com/sffc/card-creatr/actions)
 [![npm version](http://img.shields.io/npm/v/card-creatr.svg?style=flat)](https://npmjs.org/package/card-creatr "View this project on npm")
 
 ## Command Line Usage
