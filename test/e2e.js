@@ -116,16 +116,17 @@ describe("ReadAndRender", function() {
 			});
 		});
 		it("should produce the expected PNG output for config.hjson", function(done) {
-			if (isCI) {
-				// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
-				this.skip();
-			}
 			var inst = new ReadAndRender(CONFIG_PATH, { query: { title: "Cash Out" } });
 			inst.load((err) => {
 				if (err) return done(err);
 				try {
 					inst.run(-1, 1, "png", (err, buffer) => {
 						if (err) return done(err);
+						if (isCI) {
+							// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
+							this.skip();
+							return;
+						}
 						maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
 						expectBufferEquals(buffer, EXPECTED_PNG, 0.95);
 						return done(null);
@@ -136,16 +137,17 @@ describe("ReadAndRender", function() {
 			});
 		});
 		it("should produce the expected PNG output for config.ccsb", function(done) {
-			if (isCI) {
-				// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
-				this.skip();
-			}
 			var inst = new ReadAndRender(CCSB_PATH, { query: { title: "Cash Out" } });
 			inst.load((err) => {
 				if (err) return done(err);
 				try {
 					inst.run(-1, 1, "png", (err, buffer) => {
 						if (err) return done(err);
+						if (isCI) {
+							// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
+							this.skip();
+							return;
+						}
 						maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
 						expectBufferEquals(buffer, EXPECTED_PNG, 0.95);
 						return done(null);
