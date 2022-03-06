@@ -42,7 +42,7 @@
     "svg-to-png": "^4.0.0",
     "tmp": "^0.1.0",
     "uuid": "^3.3.2",
-    "word-wrappr": "^1.0.3",
+    "word-wrappr": "^1.0.8",
     "xmlbuilder": "^8.2.2"
   },
   "devDependencies": {
