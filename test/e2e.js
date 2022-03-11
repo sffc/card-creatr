@@ -185,27 +185,6 @@ describe("ReadAndRender", function() {
 				}
 			});
 		});
-		// TODO: Fix and re-enable multi-page PDF output.
-		/*
-		it("should produce the expected multipage PDF output using slimerjs for config.hjson", function(done) {
-			this.timeout(5000);
-			var inst = new ReadAndRender(CONFIG_PATH, {});
-			inst.load((err) => {
-				if (err) return done(err);
-				try {
-					inst.run(-2, 5, "pdf", (err, buffer) => {
-						if (err) return done(err);
-						maybeOverwriteExpected(EXPECTED_MULTIPAGE_PDF_PATH, buffer);
-						// The PDF seems to contain numbers that sometimes differ.  Just check the length for equality.
-						expect(EXPECTED_MULTIPAGE_PDF.length === buffer.length);
-						return done(null);
-					});
-				} catch(err) {
-					return done(err);
-				}
-			});
-		});
-		*/
 		it("should produce the expected SVG output for fontRenderMode=auto", function(done) {
 			var inst = new ReadAndRender(CONFIG_PATH, { fontRenderMode: "auto" }, { query: { title: "Cash Out" } });
 			inst.load((err) => {
