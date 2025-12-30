@@ -18,6 +18,8 @@ jobs:
       run: npm test
       env:
         CI: true
+        # https://stackoverflow.com/questions/73004195/phantomjs-wont-install-autoconfiguration-error
+        OPENSSL_CONF: /dev/null
     - name: Lint
       run: npm run lint
     - name: CLI Sanity Check
