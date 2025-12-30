@@ -15,8 +15,7 @@ jobs:
     - name: Install
       run: |
         npm ci --omit=optional
-        rm package.json package-lock.json
-        npm install skia-canvas@3
+        npm install --no-package-lock --no-save --omit=optional skia-canvas@3
     - name: Test
       run: npm test
     - name: Lint
