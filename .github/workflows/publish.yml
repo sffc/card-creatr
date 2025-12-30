@@ -12,8 +12,8 @@ jobs:
         with:
           node-version: 24.x
       - run: |
-          npm ci --omit=optional
-          npm install --no-package-lock --no-save --omit=optional skia-canvas@3
+          npm ci
+          npm uninstall --no-save svg-to-png
       - run: npm test
       - uses: JS-DevTools/npm-publish@v1
         name: Publish to npm
