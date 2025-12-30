@@ -88,3 +88,119 @@ mixin textWrap(paragraphs)
 			- }
 			- options.y += options.lineHeight
 		- options.y += options.paragraphSpacing
+
+mixin richTextWrap(paragraphs, boldFont="bold")
+	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
+	- if (typeof paragraphs === "undefined") {
+	-   if (block) {
+	-     var _pug_html = pug_html;
+	-     pug_html = "";
+	-     block();
+	-     paragraphs = pug_html;
+	-     pug_html = _pug_html;
+	-   } else {
+	-     throw new Error("Undefined field in +textWrap(): make sure that all fields referenced in the template exist in the card data");
+	-   }
+	- } else if (typeof paragraphs === "string") {
+	-   paragraphs = paragraphs.split("\n");
+	- } else if (!paragraphs) {
+	-   paragraphs = [];
+	- }
+	
+	- var options = _applyTextWrapDefaults(attributes, _fonts)
+	- var icons = []
+	- var debugs = []
+	
+	each text in paragraphs
+		- if (text.txt) text = text.txt
+		- if (!text) text = ""
+		- var content = _parseRichText(text, options, boldFont)
+		- var wordIndex = 0
+		each line, i in options.wrappr.wrap(content.stripped, options.fontSize, options.width)
+			- if (_fontRenderMode === "paths") {
+			-   var d = _makeTextPath(line, options)
+					path(d=d)&attributes(attributes)
+			- } else {
+			-   var attrs = _makeTextAttributes(line, options)
+			-		let wordX = attrs.x
+			-   let skipPad = false
+					text&attributes(attrs)
+						each word, n in line.split(' ')
+							- data = content.data[wordIndex]
+							- wrappr = data.style.includes('font-family: bold') ? _fonts.bold.wrappr : options.wrappr
+							each segment, i in word.split(ICON_SYMBOL)
+								-	if (i != 0) {
+								-		icons.push({ key: data.icons[i-1], x: wordX + options.fontSize*0.2, y: options.y - options.fontSize*0.9, size: options.fontSize })
+								- 	wordX += wrappr.computeWidth(ICON_SYMBOL, options.fontSize);
+										tspan(style='fill: transparent;') #{ICON_SYMBOL}
+								- } else if (n != 0) {
+								- 	segment = " " + segment
+								-	}
+
+								tspan(style=data.style) #{segment}
+								- wordX += wrappr.computeWidth(segment, options.fontSize);
+							- wordIndex += 1;
+			- }
+			- options.y += options.lineHeight
+		- options.y += options.paragraphSpacing
+
+	each img, i in icons
+		+imageFit(assets[img.key], img.x, img.y, img.size, img.size)
+
+mixin richTextWrap(paragraphs, boldFont="bold")
+	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
+	- if (typeof paragraphs === "undefined") {
+	-   if (block) {
+	-     var _pug_html = pug_html;
+	-     pug_html = "";
+	-     block();
+	-     paragraphs = pug_html;
+	-     pug_html = _pug_html;
+	-   } else {
+	-     throw new Error("Undefined field in +textWrap(): make sure that all fields referenced in the template exist in the card data");
+	-   }
+	- } else if (typeof paragraphs === "string") {
+	-   paragraphs = paragraphs.split("\n");
+	- } else if (!paragraphs) {
+	-   paragraphs = [];
+	- }
+	
+	- var options = _applyTextWrapDefaults(attributes, _fonts)
+	- var icons = []
+	- var debugs = []
+	
+	each text in paragraphs
+		- if (text.txt) text = text.txt
+		- if (!text) text = ""
+		- var content = _parseRichText(text, options, boldFont)
+		- var wordIndex = 0
+		each line, i in options.wrappr.wrap(content.stripped, options.fontSize, options.width)
+			- if (_fontRenderMode === "paths") {
+			- 	var d = _makeTextPath(line, options)
+				path(d=d)&attributes(attributes)
+			- } else {
+			- 	var attrs = _makeTextAttributes(line, options)
+			- 	let wordX = attrs.x
+			- 	let skipPad = false
+					text&attributes(attrs)
+					each word, n in line.split(' ')
+						- data = content.data[wordIndex]
+						- wrappr = data.style.includes('font-family: bold') ? _fonts.bold.wrappr : options.wrappr
+							each segment, i in word.split(ICON_SYMBOL)
+								- if (i != 0) {
+								- 	icons.push({ key: data.icons[i-1], x: wordX + options.fontSize*0.2, y: options.y - options.fontSize*0.9, size: options.fontSize })
+								- 	wordX += wrappr.computeWidth(ICON_SYMBOL, options.fontSize);
+										tspan(style='fill: transparent;') #{ICON_SYMBOL}
+								- } else if (n != 0) {
+								- 	segment = " " + segment
+								- }
+
+								tspan(style=data.style) #{segment}
+								- wordX += wrappr.computeWidth(segment, options.fontSize);
+						- wordIndex += 1;
+			- }
+			- options.y += options.lineHeight
+		- options.y += options.paragraphSpacing
+		
+	each img, i in icons
+		+imageFit(assets[img.key], img.x, img.y, img.size, img.size)
