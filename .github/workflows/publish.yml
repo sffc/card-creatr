@@ -13,6 +13,10 @@ jobs:
           node-version: 10.x
       - run: npm ci
       - run: npm test
+        env:
+          CI: true
+          # https://stackoverflow.com/questions/73004195/phantomjs-wont-install-autoconfiguration-error
+          OPENSSL_CONF: /dev/null
       - uses: JS-DevTools/npm-publish@v1
         name: Publish to npm
         id: publish
