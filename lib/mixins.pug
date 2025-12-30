@@ -89,7 +89,7 @@ mixin textWrap(paragraphs)
 			- options.y += options.lineHeight
 		- options.y += options.paragraphSpacing
 
-mixin richTextWrap(paragraphs, boldFont="bold")
+mixin draft_richTextWrap(paragraphs, boldFont="bold")
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
 	- if (typeof paragraphs === "undefined") {
 	-   if (block) {
@@ -114,7 +114,7 @@ mixin richTextWrap(paragraphs, boldFont="bold")
 	each text in paragraphs
 		- if (text.txt) text = text.txt
 		- if (!text) text = ""
-		- var content = _parseRichText(text, options, boldFont)
+		- var content = _draft_parseRichText(text, options, boldFont)
 		- var wordIndex = 0
 		each line, i in options.wrappr.wrap(content.stripped, options.fontSize, options.width)
 			- if (_fontRenderMode === "paths") {
