@@ -9,6 +9,8 @@ var SvgHolder = require("./lib/svg");
 var utils = require("./lib/utils");
 var rasterize = require("./lib/rasterize");
 
+require("es-arraybuffer-base64/Uint8Array.prototype.toBase64/auto");
+
 module.exports = {
 	CardRenderer,
 	CcsbReader,

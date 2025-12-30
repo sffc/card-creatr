@@ -32,6 +32,7 @@
     "csv-parse": "^4.14.2",
     "csv-stringify": "^1.0.4",
     "debug-logger": "^0.4.1",
+    "es-arraybuffer-base64": "^1.1.2",
     "hjson": "^2.0.5",
     "image-size": "^0.5.0",
     "jszip": "^3.2.2",
@@ -45,6 +46,7 @@
     "xmlbuilder": "^8.2.2"
   },
   "optionalDependencies": {
+    "skia-canvas": "^3.0.8",
     "svg-to-png": "^4.0.0"
   },
   "devDependencies": {

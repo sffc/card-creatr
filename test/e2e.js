@@ -39,8 +39,11 @@ const EXPECTED_SVG = fs.readFileSync(EXPECTED_SVG_PATH);
 const EXPECTED_AUTO_PATH = path.join(__dirname, "cases", "auto.svg");
 const EXPECTED_AUTO = fs.readFileSync(EXPECTED_AUTO_PATH);
 
-const EXPECTED_PNG_PATH = path.join(__dirname, "cases", "cash.png");
-const EXPECTED_PNG = fs.readFileSync(EXPECTED_PNG_PATH);
+const EXPECTED_PNG_PHANTOMJS_PATH = path.join(__dirname, "cases", "cash.png");
+const EXPECTED_PNG_PHANTOMJS = fs.readFileSync(EXPECTED_PNG_PHANTOMJS_PATH);
+
+const EXPECTED_PNG_SKIA_PATH = path.join(__dirname, "cases", "cash_skia.png");
+const EXPECTED_PNG_SKIA = fs.readFileSync(EXPECTED_PNG_SKIA_PATH);
 
 // const EXPECTED_PDF_PATH = path.join(__dirname, "cases", "cash.pdf");
 // const EXPECTED_PDF = fs.readFileSync(EXPECTED_PDF_PATH);
@@ -53,6 +56,17 @@ const EXPECTED_PAGE_CONCAT = fs.readFileSync(EXPECTED_PAGE_CONCAT_PATH);
 
 // const EXPECTED_MULTIPAGE_PDF_PATH = path.join(__dirname, "cases", "multipage.pdf");
 // const EXPECTED_MULTIPAGE_PDF = fs.readFileSync(EXPECTED_MULTIPAGE_PDF_PATH);
+
+let EXPECTED_PNG_PATH, EXPECTED_PNG;
+try {
+	require("svg-to-png");
+	EXPECTED_PNG_PATH = EXPECTED_PNG_PHANTOMJS_PATH;
+	EXPECTED_PNG = EXPECTED_PNG_PHANTOMJS;
+} catch(e) {
+	usingPhantomJs = false;
+	EXPECTED_PNG_PATH = EXPECTED_PNG_SKIA_PATH;
+	EXPECTED_PNG = EXPECTED_PNG_SKIA;
+}
 
 
 function maybeOverwriteExpected(path, buffer) {
@@ -122,11 +136,6 @@ describe("ReadAndRender", function() {
 				try {
 					inst.run(-1, 1, "png", (err, buffer) => {
 						if (err) return done(err);
-						if (isCI) {
-							// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
-							this.skip();
-							return;
-						}
 						maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
 						expectBufferEquals(buffer, EXPECTED_PNG, 0.95);
 						return done(null);
@@ -143,11 +152,6 @@ describe("ReadAndRender", function() {
 				try {
 					inst.run(-1, 1, "png", (err, buffer) => {
 						if (err) return done(err);
-						if (isCI) {
-							// This test fails on CI: maybe due to different versions of PhantomJS producing slightly different PNG files.
-							this.skip();
-							return;
-						}
 						maybeOverwriteExpected(EXPECTED_PNG_PATH, buffer);
 						expectBufferEquals(buffer, EXPECTED_PNG, 0.95);
 						return done(null);
