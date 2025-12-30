@@ -3,25 +3,25 @@ on:
   push:
     branches:
       - master
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
       - run: |
           npm ci
           npm uninstall --no-save svg-to-png
       - run: npm test
         env:
           CI: true
-      - uses: JS-DevTools/npm-publish@v1
-        name: Publish to npm
-        id: publish
-        with:
-          token: ${{ secrets.NPM_AUTH_TOKEN }}
+      - run: npm publish
       - if: steps.publish.outputs.type != 'none'
         name: Create GitHub Release
         id: create_release
