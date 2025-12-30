@@ -54,6 +54,9 @@ const EXPECTED_PAGE = fs.readFileSync(EXPECTED_PAGE_PATH);
 const EXPECTED_PAGE_CONCAT_PATH = path.join(__dirname, "cases", "page_concat.svg");
 const EXPECTED_PAGE_CONCAT = fs.readFileSync(EXPECTED_PAGE_CONCAT_PATH);
 
+const EXPECTED_PAGE_CONCAT_FB_PATH = path.join(__dirname, "cases", "page_concat_frontback.svg");
+const EXPECTED_PAGE_CONCAT_FB = fs.readFileSync(EXPECTED_PAGE_CONCAT_FB_PATH);
+
 // const EXPECTED_MULTIPAGE_PDF_PATH = path.join(__dirname, "cases", "multipage.pdf");
 // const EXPECTED_MULTIPAGE_PDF = fs.readFileSync(EXPECTED_MULTIPAGE_PDF_PATH);
 
@@ -192,6 +195,20 @@ describe("ReadAndRender", function() {
 					var buffer = inst.run(-2, 5, "svg");
 					maybeOverwriteExpected(EXPECTED_PAGE_CONCAT_PATH, buffer);
 					expectBufferEquals(buffer, EXPECTED_PAGE_CONCAT);
+					return done(null);
+				} catch(err) {
+					return done(err);
+				}
+			});
+		});
+		it("should produce the expected Front/Back Concatenated Pages output for config.hjson", function(done) {
+			var inst = new ReadAndRender(CONFIG_PATH, {});
+			inst.load((err) => {
+				if (err) return done(err);
+				try {
+					var buffer = inst.run(-3, 5, "svg");
+					maybeOverwriteExpected(EXPECTED_PAGE_CONCAT_FB_PATH, buffer);
+					expectBufferEquals(buffer, EXPECTED_PAGE_CONCAT_FB);
 					return done(null);
 				} catch(err) {
 					return done(err);
