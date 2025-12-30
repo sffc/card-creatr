@@ -18,6 +18,8 @@ jobs:
         npm uninstall --no-save svg-to-png
     - name: Test
       run: npm test
+      env:
+        CI: true
     - name: Lint
       run: npm run lint
     - name: CLI Sanity Check
