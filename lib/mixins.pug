@@ -89,7 +89,7 @@ mixin textWrap(paragraphs)
 			- options.y += options.lineHeight
 		- options.y += options.paragraphSpacing
 
-mixin draft_richTextWrap(paragraphs, boldFont="bold")
+mixin draft_richTextWrap(paragraphs, boldFont="title")
 	- // The following is a hack to render the pug block as the text to be wrapped if the argument is not provided.
 	- if (typeof paragraphs === "undefined") {
 	-   if (block) {
@@ -124,10 +124,10 @@ mixin draft_richTextWrap(paragraphs, boldFont="bold")
 			- 	var attrs = _makeTextAttributes(line, options)
 			- 	let wordX = attrs.x
 			- 	let skipPad = false
-					text&attributes(attrs)
+				text&attributes(attrs)
 					each word, n in line.split(' ')
 						- data = content.data[wordIndex]
-						- wrappr = data.style.includes('font-family: bold') ? _fonts.bold.wrappr : options.wrappr
+						- wrappr = data.style.includes('font-family: ' + boldFont) ? _fonts[boldFont].wrappr : options.wrappr
 							each segment, i in word.split(ICON_SYMBOL)
 								- if (i != 0) {
 								- 	icons.push({ key: data.icons[i-1], x: wordX + options.fontSize*0.2, y: options.y - options.fontSize*0.9, size: options.fontSize })
